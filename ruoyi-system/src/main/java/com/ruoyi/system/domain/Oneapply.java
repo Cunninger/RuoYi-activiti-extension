@@ -21,9 +21,9 @@ public class Oneapply extends BaseEntity {
     private Long id;
 
     /**
-     * 请假人
+     * 申请人
      */
-    @Excel(name = "请假人")
+    @Excel(name = "申请人")
     private String userId;
 
     /**
