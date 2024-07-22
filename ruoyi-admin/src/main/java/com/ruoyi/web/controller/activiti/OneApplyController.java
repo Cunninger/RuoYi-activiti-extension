@@ -36,8 +36,6 @@ import javax.annotation.Resource;
 /**
  * 请假Controller
  *
- * @author shenzhanwang
- * @date 2022-04-02
  */
 @Api(value = "请假接口")
 @Controller
@@ -58,7 +56,7 @@ public class OneApplyController extends BaseController {
 
 
     /**
-     * 部门领导审批
+     * 二级审批
      *
      * @return
      */
@@ -105,6 +103,45 @@ public class OneApplyController extends BaseController {
         return AjaxResult.error("流程不存在");
     }
 
+
+    /**
+     * 调整申请
+     * @return
+     */
+    @ApiOperation("调整申请")
+    @GetMapping("/testmodifyapply")
+    @ResponseBody
+    public AjaxResult modifyapply(String taskid)
+    {
+        Task t = taskService.createTaskQuery().taskId(taskid).singleResult();
+        String processId = t.getProcessInstanceId();
+        ProcessInstance p = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
+        if (p != null) {
+            Oneapply apply = oneapplyService.selectOneapplyById(Long.parseLong(p.getBusinessKey()));
+            return AjaxResult.success(apply);
+        }
+        return AjaxResult.error("流程不存在");
+    }
+
+    /**
+     * 发起请假申请
+     * 驳回后使用
+     * @return
+     */
+    @ApiOperation("发起请假申请-驳回后使用")
+    @GetMapping("/testaddleave")
+    @ResponseBody
+    public AjaxResult addLeave(String taskid)
+    {
+        Task t = taskService.createTaskQuery().taskId(taskid).singleResult();
+        String processId = t.getProcessInstanceId();
+        ProcessInstance p = runtimeService.createProcessInstanceQuery().processInstanceId(processId).singleResult();
+        if (p != null) {
+            Oneapply apply = oneapplyService.selectOneapplyById(Long.parseLong(p.getBusinessKey()));
+            return AjaxResult.success(apply);
+        }
+        return AjaxResult.error("流程不存在");
+    }
 
 
 

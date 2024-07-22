@@ -87,7 +87,7 @@ export default {
         password: [
           { required: true, trigger: "blur", message: "请输入您的密码" }
         ],
-        code: [{ required: true, trigger: "change", message: "请输入验证码" }]
+        // code: [{ required: true, trigger: "change", message: "请输入验证码" }]
       },
       loading: false,
       // 验证码开关

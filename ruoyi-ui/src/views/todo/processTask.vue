@@ -32,13 +32,6 @@
 
 
 
-      <!-- 添加fourapply的组件渲染 -->
-      <four-apply-form
-        v-if="taskType === 'fourapply'"
-        :form-info="formInfo"
-        :step="step"
-        @submit="handleSubmit"
-      ></four-apply-form>
     </div>
     <div>
       <time-line :activities="activities"></time-line>
@@ -86,6 +79,9 @@ const urlMap = {
   "testdeptleadercheck": "/oneapply/testdeptleadercheck",
   "testhrcheck": "/oneapply/testhrcheck",
   "testceocheck": "/oneapply/testceocheck",
+  "testmodifyapply": "/oneapply/modifyapply",
+  // 发起请假申请,此处为驳回后返回的位置
+  "testaddleave": "/oneapply/addapply",
 
 
 
@@ -141,7 +137,9 @@ export default {
     });
     console.log("step", "taskId", step, urlMap[step], taskId);
     getInfoByTaskId(urlMap[step], taskId).then(res => {
-      console.log("step", "taskId", res);
+      console.log(res)
+      // console.log("step", "taskId", res);
+      debugger
       if (res.data) {
         this.formInfo = res.data;
       }
@@ -163,30 +161,12 @@ export default {
         }
       }
 
-      if (this.taskType === "fourapply") {
-        if (
-          this.step === "destroyapply"
-          || this.step === "addLeave"
-          || this.step === "modifyapply"
-        ) {
-          const {realityStartTime, realityEndTime, reapply} = data;
-          const id = this.$route.query.id;
-          const taskId = this.taskId;
-          checkoutLeave({
-            ...data,
-            id,
-            taskId
-          }).then(res => {
-            console.log("销假成功！");
-          });
-        }
-      }
-
       if (this.taskType === "oneapply") {
+        alert(this.taskType)
         if (
           this.step === "destroyapply"
           || this.step === "addLeave"
-          || this.step === "modifyapply"
+          || this.step === "testmodifyapply"
         ) {
           const {realityStartTime, realityEndTime, reapply} = data;
           const id = this.$route.query.id;
@@ -248,8 +228,6 @@ export default {
       if (latestView) {
         this.$router.push(latestView.fullPath)
       } else {
-        // now the default is to redirect to the home page if there is no tags-view,
-        // you can adjust it according to your needs.
         if (view.name === 'Dashboard') {
           // to reload home page
           this.$router.replace({path: '/redirect' + view.fullPath})

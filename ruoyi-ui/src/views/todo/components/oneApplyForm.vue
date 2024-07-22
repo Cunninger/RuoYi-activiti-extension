@@ -5,20 +5,20 @@
         <el-input v-model="form.userId" :disabled="true"></el-input>
       </el-form-item>
       <el-form-item label="类型">
-        <el-input v-if="step !== 'modifyapply' && step !== 'addleave'" v-model="form.leaveType"
+        <el-input v-if="step !== 'testmodifyapply' && step !== 'testaddleave'" v-model="form.leaveType"
                   :disabled="canNotEdit"></el-input>
         <el-select v-else v-model="form.leaveType">
           <el-option v-for="(leaveType, i) in leaveTypeList" :key="i" :label="leaveType" :value="leaveType"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="起始时间">
-        <el-input v-if="step !== 'modifyapply' && step !== 'addleave'" v-model="form.startTime"
+        <el-input v-if="step !== 'testmodifyapply' && step !== 'testaddleave'" v-model="form.startTime"
                   :disabled="canNotEdit"></el-input>
         <el-date-picker v-else v-model="form.startTime" placeholder="选择日期" style="width: 100%;"
                         type="datetime" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
       </el-form-item>
       <el-form-item label="结束时间">
-        <el-input v-if="step !== 'modifyapply' && step !== 'addleave'" v-model="form.endTime"
+        <el-input v-if="step !== 'testmodifyapply' && step !== 'testaddleave'" v-model="form.endTime"
                   :disabled="canNotEdit"></el-input>
         <el-date-picker v-else v-model="form.endTime" placeholder="选择日期" style="width: 100%;"
                         type="datetime" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
@@ -84,13 +84,13 @@
           <el-button type="primary" @click="onSubmit">提交</el-button>
         </el-form-item>
       </template>
-      <template v-if="step==='addleave'">
+      <template v-if="step==='testaddleave'">
         <el-form-item>
           <el-button type="primary" @click="onSubmit">提交</el-button>
           <el-button type="danger" @click="cancel">撤销</el-button>
         </el-form-item>
       </template>
-      <template v-if="step==='modifyapply'">
+      <template v-if="step==='testmodifyapply'">
         <el-form-item label="是否重新申请">
           <el-radio-group v-model="form.reapply">
             <el-radio label="true">是</el-radio>
@@ -113,17 +113,16 @@
 
 const stepMap = {
   // 发起请假申请,此处为驳回后返回的位置
-  addleave: "addleave",
+  testaddleave: "addapply",
   // 请假流程中拒绝过程,回到申请人进行修改
-  modifyapply: "modifyapply",
+  testmodifyapply: "modifyapply",
   // 部门领导审批
   testdeptleadercheck: "testdeptapprove",
   // 人事审批
   testhrcheck: "testhrapprove",
   // 董事长审批
   testceocheck: "testceoapprove",
-  // 销假
-  destroyapply: "destroyapply"
+
 };
 
 import {listUser} from "@/api/system/user.js"
@@ -159,7 +158,7 @@ export default {
   },
   computed: {
     canNotEdit() {
-      return this.step !== "addleave" && this.step !== "modifyapply";
+      return this.step !== "testaddleave" && this.step !== "testmodifyapply";
     }
   },
   watch: {
